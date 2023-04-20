@@ -1,0 +1,17 @@
+{
+    "name": "FireSystem",
+    "rootNamespace": "FireSystem",
+    "references": [
+        "GUID:d8b63aba1907145bea998dd612889d6b",
+        "GUID:0caaa16d629491d429f4d596eb02f641"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
