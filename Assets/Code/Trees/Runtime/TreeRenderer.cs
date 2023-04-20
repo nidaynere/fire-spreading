@@ -50,7 +50,7 @@ namespace Trees {
             this.material = material;
 
             materialBlockProperty = new MaterialPropertyBlock();
-            bounds = new Bounds(Vector3.zero, new Vector3(100000, 100000, 100000));
+            bounds = new Bounds(Vector3.zero, new Vector3(10000, 10000, 10000));
 
             treeEntries = new NativeArray<TreeData>(maxTrees, Allocator.Persistent);
 
@@ -98,7 +98,6 @@ namespace Trees {
 
                     rotation = Quaternion.identity,
                     scale = Vector3.one,
-                    actualYPositionOnTerrain = calculatedTerrainPosition3D.y
                 };
 
                 treeEntries[i] = newTreeData;

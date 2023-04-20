@@ -1,4 +1,5 @@
 ﻿
+using Codice.Client.BaseCommands;
 using Dependency;
 using Trees;
 using Trees.Jobs;
@@ -42,18 +43,11 @@ namespace FireSpreading.UserTools {
             for (var i=0; i<treeCount; i++) {
                 var treeEntry = treeRenderer.treeEntries[i];
                 var treeInstance = treeRenderer.TreeInstances[i];
-                
-                var treePosition = treeEntry.Position;
 
-                if (results01[i] == 0) {
-                    treePosition.y = -float.MaxValue;
-                } else {
-                    treePosition.y = treeEntry.actualYPositionOnTerrain;
-                }
-                
-                treeEntry.Position = treePosition;
+                treeInstance.Color = new Color(1, 1, 1, results01[i]);
 
-                treeInstance.Matrix.SetTRS(treePosition, treeEntry.rotation, treeEntry.scale);
+                treeEntry.Status = results01[i] == 0  ? FireSystem.BurnableStatus.Disabled :
+                    FireSystem.BurnableStatus.Alive;
 
                 treeRenderer.treeEntries[i] = treeEntry;
                 treeRenderer.TreeInstances[i] = treeInstance;
