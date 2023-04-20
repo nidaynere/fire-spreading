@@ -1,3 +1,4 @@
+using Dependency;
 using Trees;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -20,6 +21,8 @@ namespace FireSpreading {
                 shadowCastingMode, 
                 receiveShadows, 
                 maxTrees);
+
+            ServiceLocator.RegisterSingleton(treeRenderer);
         }
 
         void OnDestroy() {
