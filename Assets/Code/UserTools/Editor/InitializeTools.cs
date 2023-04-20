@@ -9,8 +9,8 @@ using NUnit.Framework;
 namespace FireSpreading.UserTools {
     public class InitializeTools {
         private static bool AssetActuallyExists(string assetPath) {
-            return !(AssetDatabase.AssetPathToGUID(assetPath) == string.Empty ||
-                AssetDatabase.GetMainAssetTypeAtPath(assetPath) != null);
+            var actualPath = $"{Application.dataPath}/{assetPath}";
+            return System.IO.File.Exists(actualPath);
         }
 
         [DidReloadScripts]
@@ -26,17 +26,19 @@ namespace FireSpreading.UserTools {
             if (!AssetDatabase.IsValidFolder("Assets/UserTools")) {
                 AssetDatabase.CreateFolder("Assets", "UserTools"); 
             }
-
+             
             foreach (var tool in currentTools) {
                 Assert.NotNull(tool); 
 
-                var path = $"Assets/UserTools/{tool.GetType().Name}.asset";
+                var path = $"UserTools/{tool.GetType().Name}.asset";
 
-                if (AssetActuallyExists(path)){
+                if (AssetActuallyExists(path)){  
                     continue;
                 }
+                 
+                Debug.Log($"[InitializeTools] Found a new tool, saving at {path}");
 
-                AssetDatabase.CreateAsset(tool, path);
+                AssetDatabase.CreateAsset(tool, $"Assets/{path}");
             }
         }
     }

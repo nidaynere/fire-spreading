@@ -7,8 +7,7 @@ using TreeData = Trees.Data.TreeData;
 
 namespace Trees {
     public class TreeRenderer : IDisposable {
-
-        private static Vector3 positioningOffset = new Vector3(0.5f, 0.5f, 0.5f);
+        private static Vector3 positioningOffset = new Vector3(0.5f, 0, 0.5f);
 
         private MaterialPropertyBlock materialBlockProperty;
         private Bounds bounds;
@@ -26,9 +25,9 @@ namespace Trees {
         public TreeInstanceData[] TreeInstances     { get; private set; }
 
         // Terrain
-        private readonly Terrain activeTerrain;
-        private readonly Vector3 terrainStartPosition;
-        private readonly Vector3 terrainSize;
+        private readonly Terrain    activeTerrain;
+        private readonly Vector3    terrainStartPosition;
+        private readonly Vector3    terrainSize;
         //
 
         public TreeRenderer(
@@ -90,9 +89,8 @@ namespace Trees {
             for (var i = 0; i < maxTrees; i++) {
                 var calculatedTerrainPosition2D = new Vector3(i % (int)terrainSize.z, 0, i / (int)terrainSize.x) + terrainStartPosition;
                 var calculatedTerrainPosition3D = calculatedTerrainPosition2D;
-                calculatedTerrainPosition3D.y = activeTerrain.SampleHeight(calculatedTerrainPosition2D);
-
                 calculatedTerrainPosition3D += positioningOffset;
+                calculatedTerrainPosition3D.y = activeTerrain.SampleHeight(calculatedTerrainPosition2D);
 
                 var newTreeData = new TreeData() {
                     Position = calculatedTerrainPosition3D, 
