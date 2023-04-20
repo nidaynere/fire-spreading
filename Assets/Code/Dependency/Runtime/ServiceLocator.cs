@@ -7,9 +7,12 @@ namespace Dependency {
         private static readonly Dictionary<Type, object> singletons = new Dictionary<Type, object>();
 
         public static void RegisterSingleton<T>(T instance) where T : class {
-            Assert.IsFalse(singletons.ContainsKey(instance.GetType()), $"Instance already registered for {instance.GetType ()}");
+            var typeOfInstance = instance.GetType();
 
-            singletons[instance.GetType()] = instance;
+            Assert.IsFalse(singletons.ContainsKey(typeOfInstance), 
+                $"Instance already registered for {typeOfInstance}");
+
+            singletons[typeOfInstance] = instance;
         }
 
         public static bool TryGetSingleton <T>(out T instance) where T : class {

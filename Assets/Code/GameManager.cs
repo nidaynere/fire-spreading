@@ -9,7 +9,6 @@ namespace FireSpreading {
         [SerializeField] private Material material;
         [SerializeField] private ShadowCastingMode shadowCastingMode;
         [SerializeField] private bool receiveShadows;
-        [SerializeField] private int maxTrees = 16384;
 
         private TreeRenderer treeRenderer;
 
@@ -19,14 +18,17 @@ namespace FireSpreading {
                 mesh, 
                 material, 
                 shadowCastingMode, 
-                receiveShadows, 
-                maxTrees);
+                receiveShadows);
 
             ServiceLocator.RegisterSingleton(treeRenderer);
         }
 
         void OnDestroy() {
             treeRenderer.Dispose();
+        }
+
+        void Update() {
+            treeRenderer.Draw();
         }
     }
 }

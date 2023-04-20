@@ -7,49 +7,58 @@ using TreeData = Trees.Data.TreeData;
 
 namespace Trees {
     public class TreeRenderer : IDisposable {
+
+        private static Vector3 positioningOffset = new Vector3(0.5f, 0.5f, 0.5f);
+
         private MaterialPropertyBlock materialBlockProperty;
         private Bounds bounds;
         private ComputeBuffer instancesBuffer;
         private ComputeBuffer argsBuffer;
 
-        private NativeArray<TreeData> treeData;
-
-        public TreeInstanceData[] TreeInstances { get; private set; }
-
         private readonly int maxTrees;
         private readonly Mesh mesh;
         private readonly Material material;
 
-        private readonly TreeModifiers treeModifiers;
-
         private readonly ShadowCastingMode shadowCastingMode;
         private readonly bool receiveShadows;
+
+        public NativeArray<TreeData> TreeEntries;
+        public TreeInstanceData[] TreeInstances     { get; private set; }
+
+        // Terrain
+        private readonly Terrain activeTerrain;
+        private readonly Vector3 terrainStartPosition;
+        private readonly Vector3 terrainSize;
+        //
 
         public TreeRenderer(
             Mesh mesh, 
             Material material,
             ShadowCastingMode shadowCastingMode,
-            bool receiveShadows,
-            int maxTrees = 1024) {
-            
+            bool receiveShadows) {
+
+            // Terrain
+            activeTerrain = Terrain.activeTerrain;
+            terrainStartPosition = activeTerrain.GetPosition();
+            terrainSize = activeTerrain.terrainData.size;
+            maxTrees = (int)terrainSize.x * (int)terrainSize.z;
+            //
+
             this.shadowCastingMode = shadowCastingMode;
             this.receiveShadows = receiveShadows;
-            this.maxTrees = maxTrees;
             this.mesh = mesh;
             this.material = material;
-
-            treeModifiers = new TreeModifiers();
 
             materialBlockProperty = new MaterialPropertyBlock();
             bounds = new Bounds(Vector3.zero, new Vector3(100000, 100000, 100000));
 
-            treeData = new NativeArray<TreeData>(maxTrees, Allocator.Persistent);
+            TreeEntries = new NativeArray<TreeData>(maxTrees, Allocator.Persistent);
 
             InitializeBuffers();
         }
 
         public void Dispose () {
-            treeData.Dispose();
+            TreeEntries.Dispose();
 
             if (instancesBuffer != null) {
                 instancesBuffer.Release();
@@ -79,20 +88,34 @@ namespace Trees {
             TreeInstances = new TreeInstanceData [maxTrees];
 
             for (var i = 0; i < maxTrees; i++) {
-                var newTreeData = new TreeData() { rotation = Quaternion.identity, scale = Vector3.one };
-                treeModifiers.HideTree(ref newTreeData);
-                treeData[i] = newTreeData;
+                var calculatedTerrainPosition2D = new Vector3(i % (int)terrainSize.z, 0, i / (int)terrainSize.x) + terrainStartPosition;
+                var calculatedTerrainPosition3D = calculatedTerrainPosition2D;
+                calculatedTerrainPosition3D.y = activeTerrain.SampleHeight(calculatedTerrainPosition2D);
+
+                calculatedTerrainPosition3D += positioningOffset;
+
+                var newTreeData = new TreeData() {
+                    Position = calculatedTerrainPosition3D, 
+                    rotation = Quaternion.identity,
+                    scale = Vector3.one,
+                };
+
+                TreeEntries[i] = newTreeData;
 
                 var instance = new TreeInstanceData();
-                instance.Matrix = Matrix4x4.TRS(treeData[i].Position, newTreeData.rotation, newTreeData.scale);
+                instance.Matrix = Matrix4x4.TRS(TreeEntries[i].Position, newTreeData.rotation, newTreeData.scale);
+                instance.MatrixInverse = instance.Matrix.inverse;
+                instance.Color = Color.white;
                 TreeInstances[i] = instance;
             }
 
             argsBuffer = GetArgsBuffer((uint)maxTrees);
             instancesBuffer = new ComputeBuffer(maxTrees, TreeInstanceData.Size());
+
+            RefreshInstances();
         }
 
-        public void RefreshData () {
+        public void RefreshInstances () {
             instancesBuffer.SetData(TreeInstances);
             material.SetBuffer("_PerInstanceItemData", instancesBuffer);
         }

@@ -23,7 +23,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _Albedo:
-        m_Texture: {fileID: 2800000, guid: 9e4cbe4e53b8326458b7b1f7424eadf8, type: 3}
+        m_Texture: {fileID: 2800000, guid: e4c23ff1783ca324ab3fc345061edfb2, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
@@ -86,7 +86,7 @@ Material:
     m_Floats:
     - PROCEDURAL_INSTANCING: 1
     - _AlphaClip: 1
-    - _AlphaClipThreshold: 0.5
+    - _AlphaClipThreshold: 0
     - _Blend: 0
     - _BumpScale: 1
     - _ClearCoatMask: 0
