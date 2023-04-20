@@ -9,6 +9,7 @@ namespace Trees.Data {
     public struct TreeData : IBurnable {
         public Quaternion rotation;
         public Vector3 scale;
+        public float actualYPositionOnTerrain;
 
         public float3 Position { get; set; }
         public BurnableStatus Status { get; set; }

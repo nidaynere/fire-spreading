@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16195f0fd3e2147458cda065cc04b875, type: 3}
   m_Name: GenerateTool
   m_EditorClassIdentifier: 
+  frequency01: 0.5
