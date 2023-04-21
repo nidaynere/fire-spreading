@@ -5,12 +5,13 @@ using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine.Assertions;
-using UnityEngine.Rendering;
 
 namespace Trees.Jobs {
     [BurstCompile]
-    public struct FireSimulationJob : IJobParallelFor {
+    public struct FireSimulationJob : IJob {
+        [NativeDisableParallelForRestriction]
         private NativeArray<TreeData> treeEntries;
+        [NativeDisableParallelForRestriction]
         private NativeArray<TreeInstanceData> treeInstances;
 
         private readonly float burnSpeed;
@@ -55,89 +56,99 @@ namespace Trees.Jobs {
         }
 
         [BurstCompile]
-        public void Execute(int index) {
-            var treeEntry = treeEntries[index];
-            var treeInstance = treeInstances[index];
+        public void Execute() {
+            for (var index=0; index<maxIndex; ++index) {
 
-            var myPosition = calculatePosition(index);
+                var treeEntry = treeEntries[index];
+                var treeInstance = treeInstances[index];
 
-            switch (treeEntry.Status) {
-                case BurnStatus.Alive:
-                    bool isNestedLoopKilled = false;
-                    // check around if any fire can spread on us.
-                    for (var x = -1; x <= 1; x++) {
-                        if (isNestedLoopKilled) {
-                            break;
-                        }
+                var myPosition = calculatePosition(index);
 
-                        for (var y = -1; y <= 1; y++) {
-                            if (x >= gridSizeX) {
+                var myX = index % gridSizeX;
+                var myY = index / gridSizeZ;
+
+                switch (treeEntry.Status) {
+                    case BurnStatus.Alive:
+                        bool isNestedLoopKilled = false;
+                        // check around if any fire can spread on us.
+                        for (var x = -1; x <= 1; x++) {
+                            var xIndex = (myX + x) % gridSizeX;
+
+                            if (xIndex >= gridSizeX || xIndex < 0) {
                                 continue;
                             }
 
-                            if (y >= gridSizeZ) {
-                                continue;
+                            if (isNestedLoopKilled) {
+                                break;
                             }
 
-                            var xIndex = (index + x) % gridSizeX;
-                            var yIndex = index / gridSizeZ + y;
+                            for (var y = -1; y <= 1; y++) {
+                                var yIndex = myY + y;
 
-                            var final = xIndex + yIndex * gridSizeX;
+                                if (yIndex >= gridSizeZ || yIndex < 0) {
+                                    continue;
+                                }
 
-                            Assert.IsTrue(final < maxIndex, "Check your algorithm. This shouldnt be possible.");
+             
+                                var final = xIndex + yIndex * gridSizeX;
 
-                            var dirToTarget = math.normalize (calculatePosition(final) - myPosition);
+                                Assert.IsTrue(final < maxIndex && final >= 0, $"Check your algorithm. This shouldnt be possible. xIndex {xIndex} yIndex {yIndex} final {final}");
 
-                            if (math.dot(dirToTarget, windDirection) < 0) {
-                                // out of angle.
-                                continue;
-                            }
+                                if (treeEntries[final].Status != BurnStatus.Burning) {
+                                    continue;
+                                }
 
-                            treeEntry.BurnProgress01 += spreadingSpeed;
+                                var dirToTarget = math.normalize(myPosition - calculatePosition(final));
 
-                            if (treeEntry.BurnProgress01 >= 0) {
-                                isNestedLoopKilled = true;
+                                var dot = math.dot(dirToTarget, windDirection);
 
-                                treeEntry.BurnProgress01 = 0;
+                                if (dot < 0) {
+                                    // out of angle.
+                                    continue;
+                                }
+
                                 treeEntry.Status = BurnStatus.GonnaBurn;
+                                treeEntry.BurnProgress01 = 0;
+                                isNestedLoopKilled = true;
                                 break;
                             }
                         }
-                    }
-                    break;
+                        break;
 
-                case BurnStatus.GonnaBurn:
-                    treeEntry.BurnProgress01 += spreadingSpeed;
-                    treeInstance.Color = math.lerp(treeInstance.Color, burnColor, treeEntry.BurnProgress01);
-                    if (treeEntry.BurnProgress01 >= 0) {
-                        treeEntry.Status = BurnStatus.Burning;
-                    }
-                    break;
+                    case BurnStatus.GonnaBurn:
+                        treeEntry.BurnProgress01 += spreadingSpeed;
+                        treeInstance.Color = math.lerp(treeInstance.Color, burnColor, treeEntry.BurnProgress01);
+                        if (treeEntry.BurnProgress01 >= 1) {
+                            treeEntry.BurnProgress01 = 0;
+                            treeEntry.Status = BurnStatus.Burning;
+                        }
+                        break;
 
-                case BurnStatus.Burning:
-                    treeEntry.BurnProgress01 += burnSpeed;
-                    if (treeEntry.BurnProgress01 >= 1) {
-                        treeEntry.Status = BurnStatus.Dead;
-                        treeEntry.BurnProgress01 = 0;
-                    }
-                    break;
+                    case BurnStatus.Burning:
+                        treeEntry.BurnProgress01 += burnSpeed;
+                        if (treeEntry.BurnProgress01 >= 1) {
+                            treeEntry.Status = BurnStatus.Dead;
+                            treeEntry.BurnProgress01 = 0;
+                        }
+                        break;
 
-                case BurnStatus.Dead:
-                    treeEntry.BurnProgress01 += burnSpeed;
+                    case BurnStatus.Dead:
+                        treeEntry.BurnProgress01 += burnSpeed;
 
-                    if (treeEntry.BurnProgress01 >= 1) {
-                        treeEntry.Status = BurnStatus.Disabled;
-                    }
+                        if (treeEntry.BurnProgress01 >= 1) {
+                            treeEntry.Status = BurnStatus.Disabled;
+                        }
 
-                    treeInstance.Color = math.lerp(treeInstance.Color, deadColor, treeEntry.BurnProgress01);
-                    break;
+                        treeInstance.Color = math.lerp(treeInstance.Color, deadColor, treeEntry.BurnProgress01);
+                        break;
 
-                default:
-                    return;
+                    default:
+                        break;
+                }
+
+                treeEntries[index] = treeEntry;
+                treeInstances[index] = treeInstance;
             }
-
-            treeEntries[index] = treeEntry;
-            treeInstances[index] = treeInstance;
         }
     }
 

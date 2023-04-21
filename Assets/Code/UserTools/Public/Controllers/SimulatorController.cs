@@ -1,11 +1,11 @@
 ﻿using Dependency;
+using FireSpreading.UserTools.Misc;
 using TerrainTools;
 using Trees;
 using Trees.Jobs;
 using Unity.Jobs;
 using UnityEngine;
 using UnityEngine.Assertions;
-using UserTools.Public;
 
 namespace FireSpreading.UserTools {
     public class SimulatorController : MonoBehaviour {
@@ -19,8 +19,10 @@ namespace FireSpreading.UserTools {
         }
 
         private void FixedUpdate() {
-            var queryLength = terrainDetails.totalPoints;
+            CalculateFireAndSpreading();
+        }
 
+        private void CalculateFireAndSpreading() {
             var treeEntries = treeRenderer.TreeEntries;
             var treeInstances = treeRenderer.TreeInstances;
 
@@ -35,7 +37,7 @@ namespace FireSpreading.UserTools {
                 WindGlobals.WIND_SPEED * fixedDeltaTime,
                 fixedDeltaTime * 1);
 
-            var jobHandle = fireSimulationJob.Schedule(queryLength, 1);
+            var jobHandle = fireSimulationJob.Schedule();
             jobHandle.Complete();
 
             treeRenderer.RefreshInstances();

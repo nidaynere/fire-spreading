@@ -9,7 +9,7 @@ namespace FireSpreading.UserTools {
                 return;
             }
 
-            if (activeTool != null) {
+            if (activeTool != null && activeTool != this) {
                 activeTool.OnValueChanged(0);
             }
 
