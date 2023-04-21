@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using TreeData = Trees.Data.TreeData;
 using TerrainTools;
+using Unity.Mathematics;
 
 namespace Trees {
     public class TreeRenderer : IDisposable {
@@ -24,8 +25,8 @@ namespace Trees {
 
         public readonly int maxTrees;
 
-        public NativeArray<TreeData> treeEntries;
-        public TreeInstanceData[] TreeInstances { get; private set; }
+        public NativeArray<TreeData> TreeEntries;
+        public NativeArray<TreeInstanceData> TreeInstances;
 
         public TreeRenderer( 
             Mesh mesh, 
@@ -46,13 +47,14 @@ namespace Trees {
             materialBlockProperty = new MaterialPropertyBlock();
             bounds = new Bounds(Vector3.zero, new Vector3(10000, 10000, 10000));
 
-            treeEntries = new NativeArray<TreeData>(maxTrees, Allocator.Persistent);
+            TreeEntries = new NativeArray<TreeData>(maxTrees, Allocator.Persistent);
 
             InitializeBuffers();
         }
 
         public void Dispose () {
-            treeEntries.Dispose();
+            TreeEntries.Dispose();
+            TreeInstances.Dispose();
 
             if (instancesBuffer != null) {
                 instancesBuffer.Release();
@@ -79,10 +81,8 @@ namespace Trees {
         }
 
         private void InitializeBuffers() {
-            TreeInstances = new TreeInstanceData [maxTrees];
+            TreeInstances = new NativeArray<TreeInstanceData>(maxTrees, Allocator.Persistent);
 
-            var terrainSize = terrainDetails.terrainSize;
-            var terrainStartPosition = terrainDetails.terrainStartPosition;
             var activeTerrain = terrainDetails.activeTerrain;
 
             for (var i = 0; i < maxTrees; i++) {
@@ -97,12 +97,12 @@ namespace Trees {
                     scale = Vector3.one,
                 };
 
-                treeEntries[i] = newTreeData;
+                TreeEntries[i] = newTreeData;
 
                 var instance = new TreeInstanceData();
-                instance.Matrix = Matrix4x4.TRS(treeEntries[i].Position, newTreeData.rotation, newTreeData.scale);
-                instance.MatrixInverse = instance.Matrix.inverse;
-                instance.Color = Color.white;
+                instance.Matrix = Matrix4x4.TRS(TreeEntries[i].Position, newTreeData.rotation, newTreeData.scale);
+                instance.MatrixInverse = math.fastinverse(instance.Matrix);
+                instance.Color = new float4(1, 1, 1, 1);
                 TreeInstances[i] = instance;
             }
 

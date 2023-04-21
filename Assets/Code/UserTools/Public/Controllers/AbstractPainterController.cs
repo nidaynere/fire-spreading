@@ -44,12 +44,12 @@ namespace FireSpreading.UserTools {
         }
 
         private void ModifyTree(int index) {
-            var treeEntry = treeRenderer.treeEntries[index];
+            var treeEntry = treeRenderer.TreeEntries[index];
             var treeInstance = treeRenderer.TreeInstances[index];
 
             OnPaint(ref treeEntry, ref treeInstance);
 
-            treeRenderer.treeEntries[index] = treeEntry;
+            treeRenderer.TreeEntries[index] = treeEntry;
             treeRenderer.TreeInstances[index] = treeInstance;
 
             treeRenderer.RefreshInstances();

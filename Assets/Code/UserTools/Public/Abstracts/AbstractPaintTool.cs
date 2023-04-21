@@ -12,6 +12,11 @@ namespace FireSpreading.UserTools {
 
             if (value01 != 1f) {
                 Destroy(instance);
+                instance = null;
+                return;
+            }
+
+            if (instance != null) {
                 return;
             }
 

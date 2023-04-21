@@ -1,10 +1,12 @@
-﻿using UnityEngine;
+﻿using Unity.Burst;
+using Unity.Mathematics;
 
 namespace Trees.Data {
+    [BurstCompile]
     public struct TreeInstanceData {
-        public Matrix4x4 Matrix;
-        public Matrix4x4 MatrixInverse;
-        public Color Color;
+        public float4x4 Matrix;
+        public float4x4 MatrixInverse;
+        public float4 Color;
 
         public static int Size() {
             return sizeof(float) * 4 * 4

@@ -14,16 +14,21 @@ namespace FireSpreading.UserTools.UI {
         int IUserTool.MenuOrder => transform.GetSiblingIndex();
 
         public virtual Selectable Initialize () {
-            uiElementInstance = Instantiate(uiElement, uiHolder); 
+            scriptableTool.UserTool = this;
 
-            var toolText = uiElementInstance.GetComponentInChildren<TextMeshProUGUI>(true);
-            Assert.IsNotNull(toolText, $"Ui element should have at least one {typeof (TextMeshProUGUI)} component inside.");
+            uiElementInstance = Instantiate(uiElement, uiHolder);
 
-            toolText.text = scriptableTool.ToolName;
+            UpdateTitle();
 
             scriptableTool.OnStart();
 
             return uiElementInstance;
+        }
+
+        public void UpdateTitle() {
+            var toolText = uiElementInstance.GetComponentInChildren<TextMeshProUGUI>(true);
+            Assert.IsNotNull(toolText, $"Ui element should have at least one {typeof(TextMeshProUGUI)} component inside.");
+            toolText.text = scriptableTool.ToolName;
         }
     }
 }

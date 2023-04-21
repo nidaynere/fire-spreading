@@ -1,9 +1,11 @@
 ﻿
 using Dependency;
 using Trees;
+using Trees.Data;
 using Trees.Jobs;
 using Unity.Collections;
 using Unity.Jobs;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -38,15 +40,15 @@ namespace FireSpreading.UserTools {
             jobHandle.Complete();
 
             for (var i=0; i<treeCount; i++) {
-                var treeEntry = treeRenderer.treeEntries[i];
+                var treeEntry = treeRenderer.TreeEntries[i];
                 var treeInstance = treeRenderer.TreeInstances[i];
 
-                treeInstance.Color = new Color(1, 1, 1, results01[i]);
+                treeInstance.Color = new float4(1, 1, 1, results01[i]);
 
-                treeEntry.Status = results01[i] == 0  ? FireSystem.BurnableStatus.Disabled :
-                    FireSystem.BurnableStatus.Alive;
+                treeEntry.Status = results01[i] == 0  ? BurnStatus.Disabled :
+                    BurnStatus.Alive;
 
-                treeRenderer.treeEntries[i] = treeEntry;
+                treeRenderer.TreeEntries[i] = treeEntry;
                 treeRenderer.TreeInstances[i] = treeInstance;
             }
 
