@@ -1,15 +1,28 @@
 ﻿using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace FireSpreading.UserTools.Misc {
     public class WindIndicator : MonoBehaviour {
-        [SerializeField] private Transform windPowerIndicator;
-        public void SetWindSpeed (float power01) {
-            windPowerIndicator.localScale = new Vector3(1, 1, power01);
+        [SerializeField] private Transform windIndicatorRotator;
+        [SerializeField] private Image windPowerIndicatorImage;
+
+        private Transform mainCameraTransform;
+
+        private void Start() {
+            mainCameraTransform = Camera.main.transform;
         }
 
-        public void SetWindDirection (float3 direction) {
-            transform.rotation = Quaternion.LookRotation (direction);
+        public void SetWindSpeed (float power01) {
+            windPowerIndicatorImage.fillAmount = power01;
+        }
+
+        private void LateUpdate() {
+            var cameraY = mainCameraTransform.eulerAngles.y;
+            var windRot = Quaternion.LookRotation(WindGlobals.WIND_DIRECTION);
+
+            var windDir =  Quaternion.Euler (0, 0, -windRot.eulerAngles.y) * Quaternion.Euler (0, 0, cameraY);
+            windIndicatorRotator.rotation = windDir;
         }
     }
 }

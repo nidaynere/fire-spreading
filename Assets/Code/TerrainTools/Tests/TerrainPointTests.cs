@@ -12,7 +12,6 @@ namespace TerrainTools.Tests {
 
             var index = 2;
             var sizeX = 2;
-            var sizeZ = 3;
             /*  
                  X       X
                  *X      X
@@ -30,7 +29,6 @@ namespace TerrainTools.Tests {
             // another
             index = 6;
             sizeX = 4;
-            sizeZ = 3;
             /*      
                  X       X      X       X
                  X       X      X*      X

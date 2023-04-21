@@ -16,9 +16,6 @@ namespace FireSpreading.UserTools {
         public override void OnValueChanged(float value01) {
             var windAngle = Quaternion.Euler (0, value01 * 360, 0);
             WindGlobals.WIND_DIRECTION = windAngle * Vector3.forward;
-
-            WindGlobals.WIND_INDICATOR.SetWindDirection(
-                WindGlobals.WIND_DIRECTION);
         }
     }
 }

@@ -39,7 +39,7 @@ namespace Trees.Jobs {
             float deadSpeed) {
 
             burnColor = new float4(1, 0, 0, 1);
-            deadColor = new float4(0, 0, 0, 1);
+            deadColor = new float4(0.2f, 0.2f, 0.2f, 1);
 
             this.windDirection = math.normalize (windDirection);
 
