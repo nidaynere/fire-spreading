@@ -12,7 +12,7 @@ namespace FireSystem.Tests {
         internal struct DataSample : IBurnable {
             public Unity.Mathematics.float3 Position { get; set; }
             public BurnableStatus Status { get; set; }
-            public float BurnStartTime { get; set; }
+            public float BurnProgress01 { get; set; }
         }
 
         [UnityTest]

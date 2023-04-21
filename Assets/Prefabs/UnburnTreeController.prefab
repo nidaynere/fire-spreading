@@ -10,7 +10,7 @@ PrefabInstance:
     - target: {fileID: 1608154832889894328, guid: 05579aa390fe5174fb85455c372cba4c,
         type: 3}
       propertyPath: m_Name
-      value: BurnTreeIndicator
+      value: UnburnTreeController
       objectReference: {fileID: 0}
     - target: {fileID: 1608154832889894330, guid: 05579aa390fe5174fb85455c372cba4c,
         type: 3}
@@ -90,7 +90,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1468105078825370718}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7440939254132750223
+--- !u!114 &7186500151961362393
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -99,6 +99,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 148215845186671078}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c525743082ddfce46aa1cbda38e45364, type: 3}
+  m_Script: {fileID: 11500000, guid: b6c87990eb1de474ea5b5dfeb53840d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

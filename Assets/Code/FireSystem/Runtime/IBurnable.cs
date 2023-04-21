@@ -4,6 +4,6 @@ namespace FireSpreading.FireSystem {
     public interface IBurnable {
         public float3               Position { get; set; }
         public BurnableStatus       Status { get; set; }
-        public float                BurnStartTime { get; set; }
+        public float                BurnProgress01 { get; set; }
     }
 }
