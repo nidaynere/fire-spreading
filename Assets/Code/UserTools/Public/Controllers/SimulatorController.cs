@@ -6,7 +6,6 @@ using Trees;
 using Trees.Jobs;
 using Unity.Jobs;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace FireSpreading.UserTools {
     public class SimulatorController : MonoBehaviour {
@@ -15,6 +14,7 @@ namespace FireSpreading.UserTools {
 
         [SerializeField] private float deadSpeed = 0.2f;
         [SerializeField] private float burnSpeed = 0.3f;
+        [SerializeField] private float windSpeed = 1f;
 
         private void Start() {
             if (!ServiceLocator.TryGetSingleton(out treeRenderer)) {
@@ -40,7 +40,7 @@ namespace FireSpreading.UserTools {
                 (int)terrainDetails.terrainSize.x,
                 (int)terrainDetails.terrainSize.z,
                 WindGlobals.WIND_DIRECTION,
-                WindGlobals.WIND_SPEED * fixedDeltaTime,
+                WindGlobals.WIND_SPEED * fixedDeltaTime * windSpeed,
                 fixedDeltaTime * burnSpeed,
                 fixedDeltaTime * deadSpeed);
 

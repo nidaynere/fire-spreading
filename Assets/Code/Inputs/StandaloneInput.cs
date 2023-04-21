@@ -7,8 +7,14 @@ namespace Inputs {
         [SerializeField] private InputActionReference mouseClickReference;
         [SerializeField] private InputActionReference mousePositionReference;
 
+        private InputHelper inputHelper;
+
+        private void Start() {
+            inputHelper = new InputHelper();
+        }
+
         public override bool IsMouseActive() {
-            if (EventSystem.current.IsPointerOverGameObject()) {
+            if (inputHelper.IsPointerOverUIElement ()) {
                 return false;
             }
 
@@ -16,7 +22,7 @@ namespace Inputs {
         }
 
         public override bool IsMouseDown() {
-            if (EventSystem.current.IsPointerOverGameObject()) {
+            if (inputHelper.IsPointerOverUIElement()) {
                 return false;
             }
 
