@@ -1,5 +1,6 @@
 ﻿using Dependency;
 using Inputs;
+using System;
 using TerrainTools;
 using Trees;
 using Trees.Data;
@@ -16,7 +17,9 @@ namespace FireSpreading.UserTools {
         private AbstractInput[] inputs;
 
         private void Start() {
-            Assert.IsTrue(ServiceLocator.TryGetSingleton(out treeRenderer));
+            if (!ServiceLocator.TryGetSingleton(out treeRenderer)) {
+                throw new Exception("Tree renderer not found.");
+            }
 
             inputs = FindObjectsOfType<AbstractInput>();
 

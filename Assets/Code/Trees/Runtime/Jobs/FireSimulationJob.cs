@@ -8,22 +8,24 @@ using UnityEngine.Assertions;
 
 namespace Trees.Jobs {
     [BurstCompile]
-    public struct FireSimulationJob : IJob {
+    public struct FireSimulationJob : IJobParallelFor {
         [NativeDisableParallelForRestriction]
         private NativeArray<TreeData> treeEntries;
         [NativeDisableParallelForRestriction]
         private NativeArray<TreeInstanceData> treeInstances;
 
-        private readonly float burnSpeed;
-        private readonly float spreadingSpeed;
-        private readonly int gridSizeX, gridSizeZ;
+        [ReadOnly] private readonly float burnSpeed;
+        [ReadOnly] private readonly float spreadingSpeed;
+        [ReadOnly] private readonly float deadSpeed;
 
-        private readonly int maxIndex;
+        [ReadOnly] private readonly int gridSizeX, gridSizeZ;
 
-        private readonly float4 burnColor;
-        private readonly float4 deadColor;
+        [ReadOnly] private readonly int maxIndex;
 
-        private readonly float3 windDirection;
+        [ReadOnly] private readonly float4 burnColor;
+        [ReadOnly] private readonly float4 deadColor;
+
+        [ReadOnly] private readonly float3 windDirection;
 
         public FireSimulationJob(
             NativeArray<TreeData> treeEntries,
@@ -33,7 +35,8 @@ namespace Trees.Jobs {
             int gridSizeZ, 
             float3 windDirection,
             float spreadingSpeed,
-            float burnSpeed) {
+            float burnSpeed,
+            float deadSpeed) {
 
             burnColor = new float4(1, 0, 0, 1);
             deadColor = new float4(0, 0, 0, 1);
@@ -46,6 +49,7 @@ namespace Trees.Jobs {
             this.gridSizeZ = gridSizeZ;
             this.treeEntries = treeEntries;
             this.treeInstances = treeInstances;
+            this.deadSpeed = deadSpeed;
 
             maxIndex = gridSizeX * gridSizeZ;
         }
@@ -56,9 +60,7 @@ namespace Trees.Jobs {
         }
 
         [BurstCompile]
-        public void Execute() {
-            for (var index=0; index<maxIndex; ++index) {
-
+        public void Execute(int index) {
                 var treeEntry = treeEntries[index];
                 var treeInstance = treeInstances[index];
 
@@ -89,7 +91,6 @@ namespace Trees.Jobs {
                                     continue;
                                 }
 
-             
                                 var final = xIndex + yIndex * gridSizeX;
 
                                 Assert.IsTrue(final < maxIndex && final >= 0, $"Check your algorithm. This shouldnt be possible. xIndex {xIndex} yIndex {yIndex} final {final}");
@@ -102,7 +103,7 @@ namespace Trees.Jobs {
 
                                 var dot = math.dot(dirToTarget, windDirection);
 
-                                if (dot < 0) {
+                                if (dot < 0.5f) { // 45 angle.
                                     // out of angle.
                                     continue;
                                 }
@@ -133,7 +134,7 @@ namespace Trees.Jobs {
                         break;
 
                     case BurnStatus.Dead:
-                        treeEntry.BurnProgress01 += burnSpeed;
+                        treeEntry.BurnProgress01 += deadSpeed;
 
                         if (treeEntry.BurnProgress01 >= 1) {
                             treeEntry.Status = BurnStatus.Disabled;
@@ -148,8 +149,6 @@ namespace Trees.Jobs {
 
                 treeEntries[index] = treeEntry;
                 treeInstances[index] = treeInstance;
-            }
         }
     }
-
 }

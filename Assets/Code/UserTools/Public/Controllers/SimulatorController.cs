@@ -1,5 +1,6 @@
 ﻿using Dependency;
 using FireSpreading.UserTools.Misc;
+using System;
 using TerrainTools;
 using Trees;
 using Trees.Jobs;
@@ -12,8 +13,13 @@ namespace FireSpreading.UserTools {
         private TreeRenderer treeRenderer;
         private TerrainDetails terrainDetails;
 
+        [SerializeField] private float deadSpeed = 0.2f;
+        [SerializeField] private float burnSpeed = 0.3f;
+
         private void Start() {
-            Assert.IsTrue(ServiceLocator.TryGetSingleton(out treeRenderer));
+            if (!ServiceLocator.TryGetSingleton(out treeRenderer)) {
+                throw new Exception("Tree renderer not found.");
+            }
 
             terrainDetails = new TerrainDetails();
         }
@@ -35,9 +41,10 @@ namespace FireSpreading.UserTools {
                 (int)terrainDetails.terrainSize.z,
                 WindGlobals.WIND_DIRECTION,
                 WindGlobals.WIND_SPEED * fixedDeltaTime,
-                fixedDeltaTime * 1);
+                fixedDeltaTime * burnSpeed,
+                fixedDeltaTime * deadSpeed);
 
-            var jobHandle = fireSimulationJob.Schedule();
+            var jobHandle = fireSimulationJob.Schedule(treeRenderer.maxTrees, 1);
             jobHandle.Complete();
 
             treeRenderer.RefreshInstances();

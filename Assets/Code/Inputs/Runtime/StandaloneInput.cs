@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 namespace Inputs {
@@ -7,10 +8,18 @@ namespace Inputs {
         [SerializeField] private InputActionReference mousePositionReference;
 
         public override bool IsMouseActive() {
+            if (EventSystem.current.IsPointerOverGameObject()) {
+                return false;
+            }
+
             return mouseClickReference.action.IsPressed ();
         }
 
         public override bool IsMouseDown() {
+            if (EventSystem.current.IsPointerOverGameObject()) {
+                return false;
+            }
+
             return mouseClickReference.action.WasPressedThisFrame();
         }
 
