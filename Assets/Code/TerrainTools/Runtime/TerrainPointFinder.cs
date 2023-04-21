@@ -3,13 +3,13 @@ using UnityEngine;
 
 namespace TerrainTools {
     public class TerrainPointFinder {
-        private readonly TerrainDimensions terrainDimensions;
+        private readonly TerrainDetails terrainDetails;
         public TerrainPointFinder() {
-            terrainDimensions = new TerrainDimensions();
+            terrainDetails = new TerrainDetails();
         }
 
         public int PositionToIndexOnTerrain (Vector3 position) {
-            return PositionToIndex(position, terrainDimensions.terrainStartPosition, (int)terrainDimensions.terrainSize.x);
+            return PositionToIndex(position, terrainDetails.terrainStartPosition, (int)terrainDetails.terrainSize.x);
         }
 
         public int PositionToIndex (Vector3 position, Vector3 offset, int sizeX) {
@@ -19,7 +19,7 @@ namespace TerrainTools {
         }
 
         public Vector3 IndexToPositionOnTerrain (int index) {
-            return IndexToPosition(index, terrainDimensions.terrainStartPosition, (int)terrainDimensions.terrainSize.x);
+            return IndexToPosition(index, terrainDetails.terrainStartPosition, (int)terrainDetails.terrainSize.x);
         }
 
         public Vector3 IndexToPosition (int index, Vector3 offset, int sizeX) {

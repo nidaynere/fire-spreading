@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Inputs {
     public abstract class AbstractInput : MonoBehaviour {
@@ -11,6 +6,6 @@ namespace Inputs {
 
         public abstract bool IsMouseActive();
 
-        public abstract Vector2 MousePosition();
+        public abstract Ray GetInputRay();
     }
 }

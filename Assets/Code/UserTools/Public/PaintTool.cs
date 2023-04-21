@@ -1,16 +1,21 @@
 ﻿
+using UnityEngine;
+
 namespace FireSpreading.UserTools {
-    public class AddTool : AbstractMainTool {
-        public override string ToolName => "Add Trees";
+    public abstract class PaintTool : AbstractMainTool {
+        [SerializeField] private GameObject painter;
+
+        private GameObject instance;
 
         public override void OnValueChanged(float value01) {
             base.OnValueChanged(value01);
 
             if (value01 != 1f) {
+                Destroy(instance);
                 return;
             }
 
-            // add painter.
+            instance = Instantiate(painter);
         }
 
         public override void OnStart() {

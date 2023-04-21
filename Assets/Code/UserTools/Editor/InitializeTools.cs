@@ -4,7 +4,7 @@ using UnityEditor.Callbacks;
 using UnityEngine;
 using System.Linq;
 using UnityEditor;
-using NUnit.Framework;
+using UnityEngine.Assertions;
 
 namespace FireSpreading.UserTools {
     public class InitializeTools {
@@ -28,7 +28,7 @@ namespace FireSpreading.UserTools {
             }
              
             foreach (var tool in currentTools) {
-                Assert.NotNull(tool); 
+                Assert.IsNotNull(tool); 
 
                 var path = $"UserTools/{tool.GetType().Name}.asset";
 

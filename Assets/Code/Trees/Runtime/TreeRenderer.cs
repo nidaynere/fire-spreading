@@ -21,7 +21,7 @@ namespace Trees {
         private readonly ShadowCastingMode shadowCastingMode;
         private readonly bool receiveShadows;
 
-        private readonly TerrainDimensions terrainDimensions;
+        private readonly TerrainDetails terrainDetails;
         private readonly TerrainPointFinder terrainPointFinder;
 
         public readonly int maxTrees;
@@ -35,10 +35,10 @@ namespace Trees {
             ShadowCastingMode shadowCastingMode,
             bool receiveShadows) {
 
-            terrainDimensions = new TerrainDimensions();
+            terrainDetails = new TerrainDetails();
             terrainPointFinder = new TerrainPointFinder();
 
-            maxTrees = terrainDimensions.totalPoints;
+            maxTrees = terrainDetails.totalPoints;
 
             this.shadowCastingMode = shadowCastingMode;
             this.receiveShadows = receiveShadows;
@@ -83,9 +83,9 @@ namespace Trees {
         private void InitializeBuffers() {
             TreeInstances = new TreeInstanceData [maxTrees];
 
-            var terrainSize = terrainDimensions.terrainSize;
-            var terrainStartPosition = terrainDimensions.terrainStartPosition;
-            var activeTerrain = terrainDimensions.activeTerrain;
+            var terrainSize = terrainDetails.terrainSize;
+            var terrainStartPosition = terrainDetails.terrainStartPosition;
+            var activeTerrain = terrainDetails.activeTerrain;
 
             for (var i = 0; i < maxTrees; i++) {
                 var calculatedTerrainPosition2D = terrainPointFinder.IndexToPositionOnTerrain (i);

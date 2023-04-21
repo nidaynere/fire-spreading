@@ -7,15 +7,26 @@ namespace Inputs {
         [SerializeField] private InputActionReference mousePositionReference;
 
         public override bool IsMouseActive() {
-            throw new System.NotImplementedException();
+            return mouseClickReference.action.IsPressed ();
         }
 
         public override bool IsMouseDown() {
-            throw new System.NotImplementedException();
+            return mouseClickReference.action.WasPressedThisFrame();
         }
 
-        public override Vector2 MousePosition() {
-            throw new System.NotImplementedException();
+        public override Ray GetInputRay() {
+            var camera = Camera.main;
+
+            var near = camera.nearClipPlane;
+
+            var mousePosition = mousePositionReference.action.ReadValue<Vector2>();
+
+            Vector3 actualPos = mousePosition;
+            actualPos.z = near;
+
+            var ray = Camera.main.ScreenPointToRay(actualPos);
+
+            return ray;
         }
     }
 }
