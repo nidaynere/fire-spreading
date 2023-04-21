@@ -8,8 +8,6 @@ using TerrainTools;
 
 namespace Trees {
     public class TreeRenderer : IDisposable {
-        private static Vector3 positioningOffset = new Vector3(0.5f, 0, 0.5f);
-
         private MaterialPropertyBlock materialBlockProperty;
         private Bounds bounds;
         private ComputeBuffer instancesBuffer;
@@ -90,7 +88,6 @@ namespace Trees {
             for (var i = 0; i < maxTrees; i++) {
                 var calculatedTerrainPosition2D = terrainPointFinder.IndexToPositionOnTerrain (i);
                 var calculatedTerrainPosition3D = calculatedTerrainPosition2D;
-                calculatedTerrainPosition3D += positioningOffset;
                 calculatedTerrainPosition3D.y = activeTerrain.SampleHeight(calculatedTerrainPosition2D);
 
                 var newTreeData = new TreeData() {

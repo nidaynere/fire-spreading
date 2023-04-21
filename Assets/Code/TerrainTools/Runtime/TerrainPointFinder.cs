@@ -3,6 +3,8 @@ using UnityEngine;
 
 namespace TerrainTools {
     public class TerrainPointFinder {
+        private static Vector3 positioningOffset = new Vector3(0.5f, 0, 0.5f);
+
         private readonly TerrainDetails terrainDetails;
         public TerrainPointFinder() {
             terrainDetails = new TerrainDetails();
@@ -19,7 +21,8 @@ namespace TerrainTools {
         }
 
         public Vector3 IndexToPositionOnTerrain (int index) {
-            return IndexToPosition(index, terrainDetails.terrainStartPosition, (int)terrainDetails.terrainSize.x);
+            var position = IndexToPosition(index, terrainDetails.terrainStartPosition, (int)terrainDetails.terrainSize.x);
+            return position + positioningOffset;
         }
 
         public Vector3 IndexToPosition (int index, Vector3 offset, int sizeX) {
