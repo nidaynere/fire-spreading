@@ -102,7 +102,6 @@ namespace Trees {
                 var instance = new TreeInstanceData();
                 instance.Matrix = Matrix4x4.TRS(TreeEntries[i].Position, newTreeData.rotation, newTreeData.scale);
                 instance.MatrixInverse = math.fastinverse(instance.Matrix);
-                instance.Color = new float4(1, 1, 1, 1);
                 TreeInstances[i] = instance;
             }
 

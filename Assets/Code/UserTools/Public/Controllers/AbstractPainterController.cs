@@ -36,7 +36,11 @@ namespace FireSpreading.UserTools {
                 }
 
                 var index = terrainPointFinder.PositionToIndexOnTerrain(point);
-                transform.position = terrainPointFinder.IndexToPositionOnTerrain(index);
+
+                var gridPos2D = terrainPointFinder.IndexToPositionOnTerrain(index);
+                var gridPos3D = gridPos2D;
+                gridPos3D.y = point.y;
+                transform.position = gridPos3D;
 
                 if (!input.IsMouseActive()) {
                     continue;
