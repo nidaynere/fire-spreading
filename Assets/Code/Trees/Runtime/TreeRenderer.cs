@@ -4,6 +4,7 @@ using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
 using TreeData = Trees.Data.TreeData;
+using TerrainTools;
 
 namespace Trees {
     public class TreeRenderer : IDisposable {
@@ -20,16 +21,13 @@ namespace Trees {
         private readonly ShadowCastingMode shadowCastingMode;
         private readonly bool receiveShadows;
 
+        private readonly TerrainDimensions terrainDimensions;
+        private readonly TerrainPointFinder terrainPointFinder;
+
         public readonly int maxTrees;
 
         public NativeArray<TreeData> treeEntries;
         public TreeInstanceData[] TreeInstances     { get; private set; }
-
-        // Terrain
-        private readonly Terrain    activeTerrain;
-        private readonly Vector3    terrainStartPosition;
-        private readonly Vector3    terrainSize;
-        //
 
         public TreeRenderer(
             Mesh mesh, 
@@ -37,12 +35,10 @@ namespace Trees {
             ShadowCastingMode shadowCastingMode,
             bool receiveShadows) {
 
-            // Terrain
-            activeTerrain = Terrain.activeTerrain;
-            terrainStartPosition = activeTerrain.GetPosition();
-            terrainSize = activeTerrain.terrainData.size;
-            maxTrees = (int)terrainSize.x * (int)terrainSize.z;
-            //
+            terrainDimensions = new TerrainDimensions();
+            terrainPointFinder = new TerrainPointFinder();
+
+            maxTrees = terrainDimensions.totalPoints;
 
             this.shadowCastingMode = shadowCastingMode;
             this.receiveShadows = receiveShadows;
@@ -87,8 +83,12 @@ namespace Trees {
         private void InitializeBuffers() {
             TreeInstances = new TreeInstanceData [maxTrees];
 
+            var terrainSize = terrainDimensions.terrainSize;
+            var terrainStartPosition = terrainDimensions.terrainStartPosition;
+            var activeTerrain = terrainDimensions.activeTerrain;
+
             for (var i = 0; i < maxTrees; i++) {
-                var calculatedTerrainPosition2D = new Vector3(i % (int)terrainSize.z, 0, i / (int)terrainSize.x) + terrainStartPosition;
+                var calculatedTerrainPosition2D = terrainPointFinder.IndexToPositionOnTerrain (i);
                 var calculatedTerrainPosition3D = calculatedTerrainPosition2D;
                 calculatedTerrainPosition3D += positioningOffset;
                 calculatedTerrainPosition3D.y = activeTerrain.SampleHeight(calculatedTerrainPosition2D);

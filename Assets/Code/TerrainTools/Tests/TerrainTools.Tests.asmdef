@@ -1,13 +1,14 @@
 {
-    "name": "Trees.Runtime",
+    "name": "TerrainTools.Tests",
     "rootNamespace": "",
     "references": [
-        "GUID:2665a8d13d1b3f18800f46e256720795",
-        "GUID:d8b63aba1907145bea998dd612889d6b",
-        "GUID:65ed478fcb2583d4c91be5d031179f45",
-        "GUID:a5e91a7ae4b290e429a0f28747fc7ebe"
+        "GUID:a5e91a7ae4b290e429a0f28747fc7ebe",
+        "GUID:0acc523941302664db1f4e527237feb3",
+        "GUID:27619889b8ba8c24980f49ee34dbb44a"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
