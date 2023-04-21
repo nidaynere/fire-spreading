@@ -119,7 +119,7 @@ namespace Trees.Jobs {
 
                                 var dot = math.dot(dirToTarget, windDirection);
 
-                                if (dot < 0.5f) { // 45 angle.
+                                if (dot < random01 - random.NextFloat (0, 0.05f)) { // 45 angle.
                                     // out of angle.
                                     continue;
                                 }
