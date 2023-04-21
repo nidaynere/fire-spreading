@@ -11,7 +11,9 @@ namespace FireSpreading.UserTools {
             get => status ? "Stop Simulation" : "Start Simulation";
         }
 
+        [System.NonSerialized]
         private bool m_status;
+
         private bool status {
             get => m_status;
             set {

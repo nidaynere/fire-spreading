@@ -135,6 +135,9 @@ namespace Trees.Jobs {
                 default:
                     return;
             }
+
+            treeEntries[index] = treeEntry;
+            treeInstances[index] = treeInstance;
         }
     }
 
