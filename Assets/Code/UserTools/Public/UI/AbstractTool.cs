@@ -7,12 +7,11 @@ namespace FireSpreading.UserTools.UI {
     public abstract class AbstractTool<T> : MonoBehaviour, IUserTool where T : Selectable {
         [SerializeField] private T uiElement;
         [SerializeField] private Transform uiHolder;
-        [SerializeField] protected ScriptableTool scriptableTool;
-        [SerializeField] private int menuOrder;
+        [SerializeField] protected AbstractScriptableTool scriptableTool;
 
         protected T uiElementInstance;
 
-        int IUserTool.MenuOrder => menuOrder;
+        int IUserTool.MenuOrder => transform.GetSiblingIndex();
 
         public virtual Selectable Initialize () {
             uiElementInstance = Instantiate(uiElement, uiHolder); 

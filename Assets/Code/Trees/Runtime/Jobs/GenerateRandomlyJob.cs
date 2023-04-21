@@ -31,7 +31,7 @@ namespace Trees.Jobs {
 
             var random01 = random.NextFloat(0f, 1f);
 
-            if (random01 < frequency01) {
+            if (random01 > frequency01) {
                 results01[index] = 0;
                 return;
             }

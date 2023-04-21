@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3eb03f20698aacc408824ebf43740d82, type: 3}
-  m_Name: ClearTool
+  m_Script: {fileID: 11500000, guid: 7c39b07689dbbe24c98cdb6b2f20a8e4, type: 3}
+  m_Name: RemoveTreeTool
   m_EditorClassIdentifier: 
-  frequency01: 0
+  painter: {fileID: 148215845186671078, guid: 2e3788d8046caba42b4a90d8f56f4108, type: 3}

@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3eb03f20698aacc408824ebf43740d82, type: 3}
-  m_Name: ClearTool
+  m_Script: {fileID: 11500000, guid: 9ce0b5b7c95287e4fa5e28d69c0dec6b, type: 3}
+  m_Name: PopulateFullTool
   m_EditorClassIdentifier: 
-  frequency01: 0
+  frequency01: 1

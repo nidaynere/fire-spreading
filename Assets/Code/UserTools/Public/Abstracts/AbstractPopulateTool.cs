@@ -8,11 +8,9 @@ using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace FireSpreading.UserTools {
-    public class GenerateTool : AbstractMainTool {
-        public override string ToolName => "Generate";
-
+    public abstract class AbstractPopulateTool : AbstractMainTool {
+        [Range (0f, 1f)]
         [SerializeField] private float frequency01;
-
         public override void OnValueChanged(float value01) {
             base.OnValueChanged(value01);
 

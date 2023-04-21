@@ -18,7 +18,7 @@ namespace FireSpreading.UserTools {
             var currentToolTypes = AppDomain.CurrentDomain.GetAssemblies() 
                                 .SelectMany(assembly => assembly.GetTypes())
                                 .Where(type => 
-                                type.IsSubclassOf(typeof(ScriptableTool)) && !type.IsAbstract).
+                                type.IsSubclassOf(typeof(AbstractScriptableTool)) && !type.IsAbstract).
                                 ToArray ();  
 
             var currentTools = currentToolTypes.Select(x => ScriptableObject.CreateInstance(x));

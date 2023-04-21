@@ -27,9 +27,9 @@ namespace Trees {
         public readonly int maxTrees;
 
         public NativeArray<TreeData> treeEntries;
-        public TreeInstanceData[] TreeInstances     { get; private set; }
+        public TreeInstanceData[] TreeInstances { get; private set; }
 
-        public TreeRenderer(
+        public TreeRenderer( 
             Mesh mesh, 
             Material material,
             ShadowCastingMode shadowCastingMode,

@@ -2,7 +2,7 @@
 using UnityEngine;
 
 namespace FireSpreading.UserTools {
-    public abstract class PaintTool : AbstractMainTool {
+    public abstract class AbstractPaintTool : AbstractMainTool {
         [SerializeField] private GameObject painter;
 
         private GameObject instance;

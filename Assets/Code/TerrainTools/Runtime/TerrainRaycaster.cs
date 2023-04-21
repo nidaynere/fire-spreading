@@ -12,7 +12,7 @@ namespace TerrainTools {
             Debug.DrawRay(ray.origin, ray.direction, Color.yellow, 1);
 
             if (Physics.Raycast(
-                ray, out var hit, Mathf.Infinity, 1 << layer)) {
+                ray, out var hit, Mathf.Infinity, layer)) {
                 point = hit.point;
                 return true;
             }
