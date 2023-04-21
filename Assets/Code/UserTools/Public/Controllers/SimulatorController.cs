@@ -16,6 +16,9 @@ namespace FireSpreading.UserTools {
         [SerializeField] private float burnSpeed = 0.3f;
         [SerializeField] private float windSpeed = 1f;
 
+        [Range(0, 90)]
+        [SerializeField] private float windDirRandomizerAngle;
+
         private void Start() {
             if (!ServiceLocator.TryGetSingleton(out treeRenderer)) {
                 throw new Exception("Tree renderer not found.");
@@ -32,7 +35,9 @@ namespace FireSpreading.UserTools {
             var treeEntries = treeRenderer.TreeEntries;
             var treeInstances = treeRenderer.TreeInstances;
 
-            float fixedDeltaTime = Time.fixedDeltaTime;
+            var fixedDeltaTime = Time.fixedDeltaTime;
+
+            var windDirRandom = Quaternion.Euler(0, UnityEngine.Random.Range(-windDirRandomizerAngle, windDirRandomizerAngle), 0);
 
             var fireSimulationJob = new FireSimulationJob(
                 treeEntries,
@@ -40,7 +45,7 @@ namespace FireSpreading.UserTools {
                 (int)terrainDetails.terrainSize.x,
                 (int)terrainDetails.terrainSize.z,
                 UnityEngine.Random.Range (0, 1000),
-                WindGlobals.WIND_DIRECTION,
+                windDirRandom * WindGlobals.WIND_DIRECTION,
                 WindGlobals.WIND_SPEED * fixedDeltaTime * windSpeed,
                 fixedDeltaTime * burnSpeed,
                 fixedDeltaTime * deadSpeed);

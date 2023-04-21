@@ -8,7 +8,7 @@ namespace FireSpreading.UserTools {
             treeEntry.BurnProgress01 = 0;
 
             var currentColor = treeInstance.Color;
-            treeInstance.Color = new float4(1,1,0,currentColor.w);
+            treeInstance.Color = new float4(1,0.25f,0,currentColor.w);
         }
     }
 }

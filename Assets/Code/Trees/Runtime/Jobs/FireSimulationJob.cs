@@ -42,7 +42,7 @@ namespace Trees.Jobs {
             float deadSpeed) {
 
             burnColor = new float4(1, 0, 0, 1);
-            deadColor = new float4(0.2f, 0.2f, 0.2f, 1);
+            deadColor = new float4(0.2f, 0.1f, 0.1f, 1f);
 
             this.windDirection = math.normalize (windDirection);
             this.randomSeed = randomSeed;
@@ -119,7 +119,7 @@ namespace Trees.Jobs {
 
                                 var dot = math.dot(dirToTarget, windDirection);
 
-                                if (dot < random01 - random.NextFloat (0, 0.05f)) { // 45 angle.
+                                if (dot < 0.5f) { // 45 angle.
                                     // out of angle.
                                     continue;
                                 }
