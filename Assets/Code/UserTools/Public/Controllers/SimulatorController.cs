@@ -6,6 +6,7 @@ using Trees;
 using Trees.Jobs;
 using Unity.Jobs;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace FireSpreading.UserTools {
     public class SimulatorController : MonoBehaviour {
@@ -17,7 +18,10 @@ namespace FireSpreading.UserTools {
         [SerializeField] private float windSpeed = 1f;
 
         [Range(0, 90)]
-        [SerializeField] private float windDirRandomizerAngle;
+        [SerializeField] private float windDirRandomizerAngle = 45f;
+
+        [Range(0f, 1f)]
+        [SerializeField] private float randomWindChance01 = 0.05f;
 
         private void Start() {
             if (!ServiceLocator.TryGetSingleton(out treeRenderer)) {
@@ -37,7 +41,10 @@ namespace FireSpreading.UserTools {
 
             var fixedDeltaTime = Time.fixedDeltaTime;
 
-            var windDirRandom = Quaternion.Euler(0, UnityEngine.Random.Range(-windDirRandomizerAngle, windDirRandomizerAngle), 0);
+            var windDirRandom = 
+                Random.Range (0f, 1f) < randomWindChance01 ? 
+                Quaternion.Euler(0, Random.Range(-windDirRandomizerAngle, windDirRandomizerAngle), 0) : 
+                Quaternion.identity;
 
             var fireSimulationJob = new FireSimulationJob(
                 treeEntries,

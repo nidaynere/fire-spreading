@@ -47,4 +47,5 @@ MonoBehaviour:
   deadSpeed: 0.1
   burnSpeed: 1
   windSpeed: 2
-  windDirRandomizerAngle: 20
+  windDirRandomizerAngle: 80
+  randomWindChance01: 0.05
