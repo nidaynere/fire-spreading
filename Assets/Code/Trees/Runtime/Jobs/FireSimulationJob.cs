@@ -27,12 +27,15 @@ namespace Trees.Jobs {
 
         [ReadOnly] private readonly float3 windDirection;
 
+        [ReadOnly] private readonly int randomSeed;
+
         public FireSimulationJob(
             NativeArray<TreeData> treeEntries,
             NativeArray<TreeInstanceData> treeInstances,
 
             int gridSizeX, 
             int gridSizeZ, 
+            int randomSeed,
             float3 windDirection,
             float spreadingSpeed,
             float burnSpeed,
@@ -42,6 +45,7 @@ namespace Trees.Jobs {
             deadColor = new float4(0.2f, 0.2f, 0.2f, 1);
 
             this.windDirection = math.normalize (windDirection);
+            this.randomSeed = randomSeed;
 
             this.burnSpeed = burnSpeed;
             this.spreadingSpeed = spreadingSpeed;
@@ -95,7 +99,19 @@ namespace Trees.Jobs {
 
                                 Assert.IsTrue(final < maxIndex && final >= 0, $"Check your algorithm. This shouldnt be possible. xIndex {xIndex} yIndex {yIndex} final {final}");
 
-                                if (treeEntries[final].Status != BurnStatus.Burning) {
+                                var otherTreeStatus = treeEntries[final].Status;
+
+                                if (
+                                    otherTreeStatus != BurnStatus.Burning && 
+                                    otherTreeStatus != BurnStatus.GonnaBurn) {
+                                    continue;
+                                }
+
+                                var random = Random.CreateFromIndex((uint)(randomSeed + index));
+
+                                var random01 = random.NextFloat(0f, 1f);
+
+                                if (random01 > (otherTreeStatus == BurnStatus.GonnaBurn ? spreadingSpeed * 0.1f : 1f)) {
                                     continue;
                                 }
 

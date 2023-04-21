@@ -39,6 +39,7 @@ namespace FireSpreading.UserTools {
                 treeInstances,
                 (int)terrainDetails.terrainSize.x,
                 (int)terrainDetails.terrainSize.z,
+                UnityEngine.Random.Range (0, 1000),
                 WindGlobals.WIND_DIRECTION,
                 WindGlobals.WIND_SPEED * fixedDeltaTime * windSpeed,
                 fixedDeltaTime * burnSpeed,

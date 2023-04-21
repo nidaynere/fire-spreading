@@ -45,5 +45,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   deadSpeed: 0.1
-  burnSpeed: 0.2
+  burnSpeed: 1
   windSpeed: 2
