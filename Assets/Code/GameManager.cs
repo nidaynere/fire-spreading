@@ -12,6 +12,7 @@ namespace FireSpreading {
 
         [SerializeField] private Vector2 randomRotation = new Vector2(0, 360);
         [SerializeField] private Vector2 randomScale = new Vector2(0.75f, 1.25f);
+        [SerializeField] private float baseScale = 2f;
 
         private TreeRenderer treeRenderer;
 
@@ -22,6 +23,7 @@ namespace FireSpreading {
                 material, 
                 shadowCastingMode, 
                 receiveShadows,
+                baseScale,
                 randomRotation,
                 randomScale);
 

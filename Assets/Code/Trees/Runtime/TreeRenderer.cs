@@ -23,6 +23,8 @@ namespace Trees {
         private readonly Vector2 randomQuaternionRange;
         private readonly Vector2 randomScaleRange;
 
+        private readonly float baseScale;
+
         private readonly TerrainDetails terrainDetails;
         private readonly TerrainPointFinder terrainPointFinder;
 
@@ -36,6 +38,7 @@ namespace Trees {
             Material material,
             ShadowCastingMode shadowCastingMode,
             bool receiveShadows,
+            float baseScale,
             Vector2 randomQuaternionRange,
             Vector2 randomScaleRange) {
 
@@ -44,6 +47,7 @@ namespace Trees {
 
             maxTrees = terrainDetails.totalPoints;
 
+            this.baseScale = baseScale;
             this.randomScaleRange = randomScaleRange;
             this.randomQuaternionRange = randomQuaternionRange;
             this.shadowCastingMode = shadowCastingMode;
@@ -102,7 +106,7 @@ namespace Trees {
                 };
 
                 var randomRotation = quaternion.Euler(0, UnityEngine.Random.Range(randomQuaternionRange.x, randomQuaternionRange.y), 0);
-                var randomScale = new float3(UnityEngine.Random.Range(randomScaleRange.x, randomScaleRange.y));
+                var randomScale = new float3(UnityEngine.Random.Range(randomScaleRange.x, randomScaleRange.y)) * baseScale;
 
                 TreeEntries[i] = newTreeData;
 
