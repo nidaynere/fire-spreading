@@ -46,6 +46,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deadSpeed: 0.1
   burnSpeed: 1
-  windSpeed: 2
+  windSpeed: 6
   windDirRandomizerAngle: 80
   randomWindChance01: 0.05

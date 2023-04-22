@@ -20,6 +20,9 @@ namespace Trees {
         private readonly ShadowCastingMode shadowCastingMode;
         private readonly bool receiveShadows;
 
+        private readonly Vector2 randomQuaternionRange;
+        private readonly Vector2 randomScaleRange;
+
         private readonly TerrainDetails terrainDetails;
         private readonly TerrainPointFinder terrainPointFinder;
 
@@ -32,13 +35,17 @@ namespace Trees {
             Mesh mesh, 
             Material material,
             ShadowCastingMode shadowCastingMode,
-            bool receiveShadows) {
+            bool receiveShadows,
+            Vector2 randomQuaternionRange,
+            Vector2 randomScaleRange) {
 
             terrainDetails = new TerrainDetails();
             terrainPointFinder = new TerrainPointFinder();
 
             maxTrees = terrainDetails.totalPoints;
 
+            this.randomScaleRange = randomScaleRange;
+            this.randomQuaternionRange = randomQuaternionRange;
             this.shadowCastingMode = shadowCastingMode;
             this.receiveShadows = receiveShadows;
             this.mesh = mesh;
@@ -92,15 +99,15 @@ namespace Trees {
 
                 var newTreeData = new TreeData() {
                     Position = calculatedTerrainPosition3D,
-
-                    rotation = Quaternion.identity,
-                    scale = Vector3.one,
                 };
+
+                var randomRotation = quaternion.Euler(0, UnityEngine.Random.Range(randomQuaternionRange.x, randomQuaternionRange.y), 0);
+                var randomScale = new float3(UnityEngine.Random.Range(randomScaleRange.x, randomScaleRange.y));
 
                 TreeEntries[i] = newTreeData;
 
                 var instance = new TreeInstanceData();
-                instance.Matrix = Matrix4x4.TRS(TreeEntries[i].Position, newTreeData.rotation, newTreeData.scale);
+                instance.Matrix = float4x4.TRS(TreeEntries[i].Position, randomRotation, randomScale);
                 instance.MatrixInverse = math.fastinverse(instance.Matrix);
                 TreeInstances[i] = instance;
             }

@@ -71,14 +71,14 @@ namespace Trees.Jobs {
                 var myPosition = calculatePosition(index);
 
                 var myX = index % gridSizeX;
-                var myY = index / gridSizeZ;
+                var myY = index / gridSizeX;
 
                 switch (treeEntry.Status) {
                     case BurnStatus.Alive:
                         bool isNestedLoopKilled = false;
                         // check around if any fire can spread on us.
                         for (var x = -1; x <= 1; x++) {
-                            var xIndex = (myX + x) % gridSizeX;
+                            var xIndex = myX + x;
 
                             if (xIndex >= gridSizeX || xIndex < 0) {
                                 continue;
