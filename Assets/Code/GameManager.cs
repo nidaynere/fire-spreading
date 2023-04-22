@@ -16,7 +16,7 @@ namespace FireSpreading {
         private TreeRenderer treeRenderer;
 
         // Start is called before the first frame update
-        void Start() {
+        void Awake() {
             treeRenderer = new TreeRenderer(
                 mesh, 
                 material, 

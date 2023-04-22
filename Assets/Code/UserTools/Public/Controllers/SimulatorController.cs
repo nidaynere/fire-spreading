@@ -57,7 +57,7 @@ namespace FireSpreading.UserTools {
                 fixedDeltaTime * burnSpeed,
                 fixedDeltaTime * deadSpeed);
 
-            var jobHandle = fireSimulationJob.Schedule(treeRenderer.maxTrees, 1);
+            var jobHandle = fireSimulationJob.Schedule(treeRenderer.maxTrees, 16);
             jobHandle.Complete();
 
             treeRenderer.RefreshInstances();

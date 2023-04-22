@@ -49,3 +49,4 @@ MonoBehaviour:
   windSpeed: 6
   windDirRandomizerAngle: 80
   randomWindChance01: 0.05
+  innerLoopBatchCount: 1

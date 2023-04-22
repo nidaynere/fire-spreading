@@ -1,5 +1,4 @@
 ﻿using FireSpreading.UserTools.Misc;
-using UnityEngine;
 
 namespace FireSpreading.UserTools {
     public sealed class WindSpeedTool : AbstractScriptableTool {
