@@ -9,6 +9,7 @@ using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Assertions;
+using Random = UnityEngine.Random;
 
 namespace FireSpreading.UserTools {
     public abstract class AbstractPopulateTool : AbstractMainTool {
@@ -38,7 +39,7 @@ namespace FireSpreading.UserTools {
 
             var results01 = new NativeArray<byte>(treeCount, Allocator.Persistent);
 
-            var randomizerJob = new GenerateRandomlyJob(results01, frequency01, (int) (Time.time + Time.deltaTime * 1000));
+            var randomizerJob = new GenerateRandomlyJob(results01, frequency01, Random.Range (0, 1000));
 
             var jobHandle = randomizerJob.Schedule(treeCount, 1);
             jobHandle.Complete();
@@ -56,7 +57,7 @@ namespace FireSpreading.UserTools {
                 treeRenderer.TreeInstances[i] = treeInstance;
             }
 
-            treeRenderer.RefreshInstances();
+            treeRenderer.RefreshGraphic();
 
             results01.Dispose();
         }

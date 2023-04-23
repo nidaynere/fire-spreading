@@ -6,6 +6,7 @@ using UnityEngine.Rendering;
 using TreeData = Trees.Data.TreeData;
 using TerrainTools;
 using Unity.Mathematics;
+using System.Threading.Tasks;
 
 namespace Trees {
     public class TreeRenderer : IDisposable {
@@ -119,12 +120,19 @@ namespace Trees {
             argsBuffer = GetArgsBuffer((uint)maxTrees);
             instancesBuffer = new ComputeBuffer(maxTrees, TreeInstanceData.Size());
 
-            RefreshInstances();
+            material.SetBuffer("_PerInstanceItemData", instancesBuffer);
         }
 
-        public void RefreshInstances () {
+        public void RefreshGraphic (int startIndex, int count) {
+            instancesBuffer.SetData(TreeInstances, startIndex, startIndex, count);
+        }
+
+        public void RefreshGraphic (int index) {
+            instancesBuffer.SetData(TreeInstances, index, index, 1);
+        }
+
+        public void RefreshGraphic() {
             instancesBuffer.SetData(TreeInstances);
-            material.SetBuffer("_PerInstanceItemData", instancesBuffer);
         }
 
         public void Draw () {

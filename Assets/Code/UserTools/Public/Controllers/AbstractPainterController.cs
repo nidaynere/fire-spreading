@@ -59,7 +59,7 @@ namespace FireSpreading.UserTools {
             treeRenderer.TreeEntries[index] = treeEntry;
             treeRenderer.TreeInstances[index] = treeInstance;
 
-            treeRenderer.RefreshInstances();
+            treeRenderer.RefreshGraphic(index);
         }
 
         protected abstract void OnPaint(ref TreeData treeEntry, ref TreeInstanceData treeInstance);

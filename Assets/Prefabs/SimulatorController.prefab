@@ -44,9 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e61751d7b55fd07448eb01d38d352497, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deadSpeed: 0.1
-  burnSpeed: 1
-  windSpeed: 6
+  deadSpeed: 0.4
+  burnSpeed: 0.5
+  windSpeed: 7
   windDirRandomizerAngle: 80
   randomWindChance01: 0.05
-  innerLoopBatchCount: 1
+  maxUpdateVisuals: 256

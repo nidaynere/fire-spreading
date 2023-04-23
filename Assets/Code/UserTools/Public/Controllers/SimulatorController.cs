@@ -4,6 +4,7 @@ using System;
 using TerrainTools;
 using Trees;
 using Trees.Jobs;
+using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -23,12 +24,25 @@ namespace FireSpreading.UserTools {
         [Range(0f, 1f)]
         [SerializeField] private float randomWindChance01 = 0.05f;
 
+        [SerializeField] private int maxUpdateVisuals = 32;
+
+        private NativeArray<byte> updateVisualOrderArray;
+        private int updateVisualOrderArrayLength;
+        private int updateVisualOrderIndex;
+
         private void Start() {
             if (!ServiceLocator.TryGetSingleton(out treeRenderer)) {
                 throw new Exception("Tree renderer not found.");
             }
 
             terrainDetails = new TerrainDetails();
+
+            updateVisualOrderArray = new NativeArray<byte>(treeRenderer.maxTrees, Allocator.Persistent);
+            updateVisualOrderArrayLength = treeRenderer.maxTrees;
+        }
+
+        private void OnDestroy() {
+            updateVisualOrderArray.Dispose();
         }
 
         private void FixedUpdate() {
@@ -49,9 +63,10 @@ namespace FireSpreading.UserTools {
             var fireSimulationJob = new FireSimulationJob(
                 treeEntries,
                 treeInstances,
+                updateVisualOrderArray,
                 (int)terrainDetails.terrainSize.x,
                 (int)terrainDetails.terrainSize.z,
-                UnityEngine.Random.Range (0, 1000),
+                Random.Range (0, 1000),
                 windDirRandom * WindGlobals.WIND_DIRECTION,
                 WindGlobals.WIND_SPEED * fixedDeltaTime * windSpeed,
                 fixedDeltaTime * burnSpeed,
@@ -60,7 +75,28 @@ namespace FireSpreading.UserTools {
             var jobHandle = fireSimulationJob.Schedule(treeRenderer.maxTrees, 16);
             jobHandle.Complete();
 
-            treeRenderer.RefreshInstances();
+            var updated = 0;
+
+            while (updateVisualOrderIndex < updateVisualOrderArrayLength) {
+                var i = updateVisualOrderIndex;
+
+                if (++updateVisualOrderIndex >= updateVisualOrderArrayLength) {
+                    updateVisualOrderIndex = 0;
+                    break;
+                }
+
+                if (updateVisualOrderArray[i] == 0) {
+                    continue;
+                }
+
+                if (++updated > maxUpdateVisuals) {
+                    break; // out of limit.
+                }
+
+                updateVisualOrderArray[i] = 0;
+
+                treeRenderer.RefreshGraphic(i);
+            }
         }
     }
 }
