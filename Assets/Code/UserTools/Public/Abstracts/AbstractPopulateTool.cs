@@ -48,7 +48,7 @@ namespace FireSpreading.UserTools {
                 var treeEntry = treeRenderer.TreeEntries[i];
                 var treeInstance = treeRenderer.TreeInstances[i];
 
-                treeInstance.Color = new float4(1, 1, 1, results01[i]);
+                treeInstance.SetColor (new float4(1, 1, 1, results01[i]));
 
                 treeEntry.Status = results01[i] == 0  ? BurnStatus.Disabled :
                     BurnStatus.Alive;

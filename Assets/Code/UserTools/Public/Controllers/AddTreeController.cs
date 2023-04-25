@@ -11,7 +11,7 @@ namespace FireSpreading.UserTools {
 
             treeEntry.Status = BurnStatus.Alive;
             treeEntry.BurnProgress01 = 0;
-            treeInstance.Color = new float4 (1,1,1,1);
+            treeInstance.SetColor (new float4 (1,1,1,1));
         }
     }
 }

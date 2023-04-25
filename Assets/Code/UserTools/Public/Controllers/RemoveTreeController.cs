@@ -6,7 +6,7 @@ namespace FireSpreading.UserTools {
         protected override void OnPaint(ref TreeData treeEntry, ref TreeInstanceData treeInstance) {
             treeEntry.Status = BurnStatus.Disabled;
             treeEntry.BurnProgress01 = 0;
-            treeInstance.Color = default;
+            treeInstance.SetColor (default);
         }
     }
 }

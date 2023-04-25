@@ -64,6 +64,7 @@ namespace FireSpreading.UserTools {
                 treeEntries,
                 treeInstances,
                 updateVisualOrderArray,
+                Time.time,
                 (int)terrainDetails.terrainSize.x,
                 (int)terrainDetails.terrainSize.z,
                 Random.Range (0, 1000),

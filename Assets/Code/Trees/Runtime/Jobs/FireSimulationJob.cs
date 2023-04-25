@@ -31,10 +31,13 @@ namespace Trees.Jobs {
 
         [ReadOnly] private readonly int randomSeed;
 
+        [ReadOnly] private readonly float time;
+
         public FireSimulationJob(
             NativeArray<TreeData> treeEntries,
             NativeArray<TreeInstanceData> treeInstances,
             NativeArray<byte> updateVisualOrderArray,
+            float time,
             int gridSizeX, 
             int gridSizeZ, 
             int randomSeed,
@@ -42,6 +45,8 @@ namespace Trees.Jobs {
             float spreadingSpeed,
             float burnSpeed,
             float deadSpeed) {
+
+            this.time = time;
 
             burnColor = new float4(1, 0, 0, 1);
             deadColor = new float4(0.2f, 0.1f, 0.1f, 1f);
@@ -130,6 +135,9 @@ namespace Trees.Jobs {
                                 treeEntry.Status = BurnStatus.GonnaBurn;
                                 treeEntry.BurnProgress01 = 0;
 
+                                treeInstance.ColorInTime(time, burnColor);
+                                updateVisualOrderArray[index] = 1;
+
                                 isNestedLoopKilled = true;
                                 break;
                             }
@@ -138,9 +146,6 @@ namespace Trees.Jobs {
 
                     case BurnStatus.GonnaBurn:
                         treeEntry.BurnProgress01 += spreadingSpeed;
-                        treeInstance.Color = math.lerp(treeInstance.Color, burnColor, treeEntry.BurnProgress01);
-
-                        updateVisualOrderArray[index] = 1;
 
                         if (treeEntry.BurnProgress01 >= 1) {
                             treeEntry.BurnProgress01 = 0;
@@ -153,14 +158,16 @@ namespace Trees.Jobs {
                         if (treeEntry.BurnProgress01 >= 1) {
                             treeEntry.Status = BurnStatus.Dead;
                             treeEntry.BurnProgress01 = 0;
+
+
+                            treeInstance.ColorInTime(time, deadColor);
+                            updateVisualOrderArray[index] = 1;
                         }
                     break;
 
                     case BurnStatus.Dead:
                         treeEntry.BurnProgress01 += deadSpeed;
-                        treeInstance.Color = math.lerp(treeInstance.Color, deadColor, treeEntry.BurnProgress01);
 
-                        updateVisualOrderArray[index] = 1;
                         if (treeEntry.BurnProgress01 >= 1) {
                             treeEntry.Status = BurnStatus.Disabled;
                         }

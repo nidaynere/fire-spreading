@@ -4,7 +4,10 @@
 struct InstanceItemData {
 	float4x4 worldMatrix;
 	float4x4 worldMatrixInverse;
+
+	float transitionStartTime;
 	float4 color;
+	float4 targetColor;
 };
 
 StructuredBuffer<InstanceItemData> _PerInstanceItemData;
@@ -40,7 +43,13 @@ void GetColorItem_float(out float4 Out) {
 	Out = float4(1, 1, 1, 1);
 	#ifndef SHADERGRAPH_PREVIEW
 	#if UNITY_ANY_INSTANCING_ENABLED
-	Out = _PerInstanceItemData[unity_InstanceID].color;
+	float time = _Time.y;
+
+	float transitionStartTime = _PerInstanceItemData[unity_InstanceID].transitionStartTime;
+	float4 startColor = _PerInstanceItemData[unity_InstanceID].color;
+	float4 endColor = _PerInstanceItemData[unity_InstanceID].targetColor;
+
+	Out = lerp(startColor, endColor, clamp (time - transitionStartTime, 0, 1));
 	#endif
 	#endif
 }
